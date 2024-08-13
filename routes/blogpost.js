@@ -1,5 +1,8 @@
+require('dotenv').config()
 const express = require('express');
 var router = express.Router();
+const jwt = require('jsonwebtoken');
+const verifyToken = require('../authentication/tokenUtils');
 
 // Require controller modules.
 const blogpost_controller = require("../controllers/blogpostController");
@@ -14,9 +17,27 @@ router.get('/:blogpostId', blogpost_controller.get_blogpost);
 router.get('/:blogpostId/comments', blogpost_controller.get_blogpost_comments);
 
 // POST new blog post to server
-router.post('/', blogpost_controller.post_blogpost);
+router.post('/', verifyToken, (req, res) => {
+    jwt.verify(req.token, process.env.SECRET, (err, authData) => {
+        if(err) {
+          res.sendStatus(403);
+        } else {
+            blogpost_controller.post_blogpost;
+            res.json({ authData });
+        };
+    });
+});
 
 // DELETE blog post from server
-router.delete('/:blogpostId', blogpost_controller.delete_blogpost);
+router.delete('/:blogpostId', verifyToken, (req, res) => {
+    jwt.verify(req.token, process.env.SECRET, (err, authData) => {
+        if(err) {
+          res.sendStatus(403);
+        } else {
+            blogpost_controller.delete_blogpost;
+            res.json({ authData });
+        };
+    });
+});
 
 module.exports = router;

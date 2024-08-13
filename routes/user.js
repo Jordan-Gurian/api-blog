@@ -1,5 +1,7 @@
 const express = require('express');
 var router = express.Router();
+const jwt = require('jsonwebtoken');
+const verifyToken = require('../authentication/tokenUtils');
 
 // Require controller modules.
 const user_controller = require("../controllers/userController");
@@ -20,7 +22,15 @@ router.get('/:userId/comments', user_controller.get_user_comments);
 router.post('/', user_controller.post_user);
 
 // DELETE user from server
-router.delete('/:userId', user_controller.delete_user);
-
+router.delete('/:userId', verifyToken, (req, res) => {
+    jwt.verify(req.token, process.env.SECRET, (err, authData) => {
+        if(err) {
+          res.sendStatus(403);
+        } else {
+            user_controller.delete_user;
+            res.json({ authData });
+        };
+    });
+});
 
 module.exports = router;

@@ -39,7 +39,7 @@ exports.post_blogpost = asyncHandler(async (req, res, next) => {
 
     await User.findByIdAndUpdate(user, { $push: { blogposts: newPost } })
 
-    return res.json(blogpost);
+    return blogpost;
 });
 
 exports.delete_blogpost = asyncHandler(async (req, res, next) => {

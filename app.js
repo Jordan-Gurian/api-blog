@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const db = require('./models/index.js');
+const cors = require('cors')
 
 const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
@@ -22,7 +23,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
-  origin: "api-blog-production-1cb6.up.railway.app",  credentials: true,
+  origin: "http://localhost:3000",  credentials: true,
 }));
 
 app.use('/', indexRouter);

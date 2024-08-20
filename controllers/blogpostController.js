@@ -5,6 +5,8 @@ const Comment = require('../models/comment');
 
 const asyncHandler = require("express-async-handler");
 const { body, validationResult, Result } = require("express-validator");
+const verifyToken = require('../authentication/tokenUtils');
+const jwt = require('jsonwebtoken');
 
 exports.get_all_blogposts = asyncHandler(async (req, res, next) => {
     // Get all posts
@@ -24,22 +26,29 @@ exports.get_blogpost_comments = asyncHandler(async (req, res, next) => {
 
 exports.post_blogpost = asyncHandler(async (req, res, next) => {
     // Post post to server
-    const user = req.body.author;
-    
-    const blogpost = new BlogPost({
-        author: user,
-        title: req.body.title,
-        message: req.body.message,
-        published: req.body.published,
-        timestamp: Date.now(),
-        comments: [],
+    jwt.verify(req.token, process.env.SECRET, async (err, authData) => {
+        if(err) {
+            return res.sendStatus(403);
+        } else {
+            const user = req.body.author;
+            
+            const blogpost = new BlogPost({
+                author: user,
+                title: req.body.title,
+                message: req.body.message,
+                published: req.body.published,
+                timestamp: Date.now(),
+                comments: [],
+            });
+
+            const newPost = await blogpost.save();
+        
+            await User.findByIdAndUpdate(user, { $push: { blogposts: newPost } })
+
+            return res.sendStatus(201);
+
+        };
     });
-
-    const newPost = await blogpost.save();
-
-    await User.findByIdAndUpdate(user, { $push: { blogposts: newPost } })
-
-    return blogpost;
 });
 
 exports.delete_blogpost = asyncHandler(async (req, res, next) => {

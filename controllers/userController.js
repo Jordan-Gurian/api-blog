@@ -71,7 +71,7 @@ exports.post_user = asyncHandler(async (req, res, next) => {
 
     user = await newUser.save();
 
-    jwt.sign({ user }, process.env.SECRET, { expiresIn: '3000s' }, (err, token) => {
+    jwt.sign({ user }, process.env.SECRET, { expiresIn: '10h' }, (err, token) => {
       res.json({ token });
     });
     

@@ -17,16 +17,7 @@ router.get('/:blogpostId', blogpost_controller.get_blogpost);
 router.get('/:blogpostId/comments', blogpost_controller.get_blogpost_comments);
 
 // POST new blog post to server
-router.post('/', verifyToken, (req, res) => {
-    jwt.verify(req.token, process.env.SECRET, (err, authData) => {
-        if(err) {
-          res.sendStatus(403);
-        } else {
-            blogpost_controller.post_blogpost;
-            res.json({ authData });
-        };
-    });
-});
+router.post('/', verifyToken, blogpost_controller.post_blogpost);
 
 // DELETE blog post from server
 router.delete('/:blogpostId', verifyToken, (req, res) => {

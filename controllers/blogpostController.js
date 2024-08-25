@@ -5,7 +5,6 @@ const Comment = require('../models/comment');
 
 const asyncHandler = require("express-async-handler");
 const { body, validationResult, Result } = require("express-validator");
-const verifyToken = require('../authentication/tokenUtils');
 const jwt = require('jsonwebtoken');
 
 exports.get_all_blogposts = asyncHandler(async (req, res, next) => {

@@ -10,16 +10,7 @@ const comment_controller = require("../controllers/commentController");
 router.get('/:commentId', comment_controller.get_comment);
 
 // POST new comment to server
-router.post('/', verifyToken, (req, res) => {
-    jwt.verify(req.token, process.env.SECRET, (err, authData) => {
-        if(err) {
-          res.sendStatus(403);
-        } else {
-            comment_controller.post_comment;
-            res.json({ authData });
-        };
-    });
-});
+router.post('/', verifyToken, comment_controller.post_comment);
 
 // PUT (update) comment
 router.put('/:commentId', verifyToken, (req, res) => {

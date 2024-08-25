@@ -14,10 +14,11 @@ exports.get_all_users = asyncHandler(async (req, res, next) => {
     return res.json(await User.find({}).exec());
 });
 
-// exports.get_user = asyncHandler(async (req, res, next) => {
-//     // Get specific userspassword
-//     return res.json(await User.find({ _id: req.params.userId }).exec());
-// });
+exports.get_user = asyncHandler(async (req, res, next) => {
+    // Get specific user
+    console.log(req.params.userId);
+    return res.json(await User.find({ _id: req.params.userId }).exec());
+});
 
 exports.get_user_posts = asyncHandler(async (req, res, next) => {
     // Get user's posts

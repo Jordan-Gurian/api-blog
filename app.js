@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -23,7 +24,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
-  origin: "http://localhost:3000",  credentials: true,
+  origin: process.env.CLIENT_SIDE_PATH,  credentials: true,
 }));
 
 app.use('/', indexRouter);
